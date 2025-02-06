@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AdBlocker Effectiveness Test</title>
+    <style>
+        :root {
+            --green: #4CAF50;
+            --red: #f44336;
+            --yellow: #ffeb3b;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .test-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            background: #f5f5f5;
+        }
+
+        .status-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .score-board {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="score-board">
+        <h3>Protection Score: <span id="score">0%</span></h3>
+    </div>
+
+    <h1>AdBlocker Test</h1>
+
+    <div class="test-item" id="traditional-ad">
+        <div class="status-dot"></div>
+        <div>
+            <h3>Traditional Ads</h3>
+            <p>Testing doubleclick.net and googleads.com</p>
+        </div>
+    </div>
+
+    <div class="test-item" id="social-tracker">
+        <div class="status-dot"></div>
+        <div>
+            <h3>Social Trackers</h3>
+            <p>Testing Facebook, Twitter, and Pinterest trackers</p>
+        </div>
+    </div>
+
+    <div class="test-item" id="analytics">
+        <div class="status-dot"></div>
+        <div>
+            <h3>Analytics</h3>
+            <p>Testing Google Analytics and Mixpanel</p>
+        </div>
+    </div>
+
+    <div class="test-item" id="cryptojacking">
+        <div class="status-dot"></div>
+        <div>
+            <h3>Cryptojacking</h3>
+            <p>Testing cryptocurrency mining scripts</p>
+        </div>
+    </div>
+
+    <script>
+        const tests = {
+            'traditional-ad': [
+                'https://doubleclick.net/ad.js',
+                'https://googleads.com/tracking.js'
+            ],
+            'social-tracker': [
+                'https://connect.facebook.net/tracker.js',
+                'https://ads.twitter.com/pixel.js',
+                'https://ads.pinterest.com/tracking.js'
+            ],
+            'analytics': [
+                'https://www.google-analytics.com/analytics.js',
+                'https://cdn.mxpnl.com/mixpanel.js'
+            ],
+            'cryptojacking': [
+                'https://coinhive.com/miner.js',
+                'https://cryptoloot.com/miner.js'
+            ]
+        };
+
+        let testResults = {};
+        let completedTests = 0;
+        const totalTests = Object.values(tests).reduce((a, b) => a + b.length, 0);
+
+        function updateScore() {
+            const passed = Object.values(testResults).filter(r => r).length;
+            const score = (passed / totalTests * 100).toFixed(1);
+            document.getElementById('score').textContent = `${score}%`;
+        }
+
+        function runTest(type, url) {
+            return new Promise(resolve => {
+                const img = new Image();
+                img.src = url + '?test=' + Date.now();
+
+                img.onload = () => {
+                    // Check if loaded resource is a redirect
+                    if(img.width === 1 && img.height === 1) {
+                        testResults[url] = 'redirected';
+                        resolve('redirected');
+                    } else {
+                        testResults[url] = false;
+                        resolve(false);
+                    }
+                };
+
+                img.onerror = () => {
+                    testResults[url] = true;
+                    resolve(true);
+                };
+            });
+        }
+
+        async function runAllTests() {
+            for (const [type, urls] of Object.entries(tests)) {
+                const container = document.getElementById(type);
+                const dot = container.querySelector('.status-dot');
+
+                let blockedCount = 0;
+                for (const url of urls) {
+                    const result = await runTest(type, url);
+                    if (result === true) blockedCount++;
+                    completedTests++;
+                }
+
+                // Update UI based on results
+                if (blockedCount === urls.length) {
+                    dot.style.backgroundColor = var(--green);
+                } else if (blockedCount > 0) {
+                    dot.style.backgroundColor = var(--yellow);
+                } else {
+                    dot.style.backgroundColor = var(--red);
+                }
+
+                updateScore();
+            }
+        }
+
+        // Additional check for redirects
+        function checkRedirects() {
+            const script = document.createElement('script');
+            script.src = 'https://www.google-analytics.com/analytics.js';
+
+            script.onload = () => {
+                try {
+                    // Check if script was redirected to local noop
+                    if(script.innerHTML.includes('uBlock')) {
+                        testResults['analytics-redirect'] = true;
+                    }
+                } catch(e) {}
+                updateScore();
+            };
+
+            document.head.appendChild(script);
+        }
+
+        // Start tests
+        runAllTests();
+        checkRedirects();
+    </script>
+</body>
+</html>
