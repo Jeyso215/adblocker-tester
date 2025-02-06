@@ -13,19 +13,6 @@
     </style>
 </head>
 <body>
-    <!-- Previous HTML structure remains -->
-
-    <!-- Added Cryptojacking Section -->
-    <div class="test-category">
-        <h2>⛏️ Cryptojacking</h2>
-        <div class="test-item" id="cryptojacking">
-            <div class="status-dot"></div>
-            <div>
-                <h3>Browser Mining</h3>
-                <p>Testing CoinHive, Crypto-Loot, and Webmine</p>
-            </div>
-        </div>
-    </div>
 
     <!-- Enhanced Fingerprinting Section -->
     <div class="test-category">
@@ -65,12 +52,6 @@
     <script>
         // Updated tests configuration
         const tests = {
-            // Previous tests remain
-            'cryptojacking': [
-                'https://coinhive.com/lib/miner.js',
-                'https://cryptoloot.com/lib/miner.js',
-                'https://webmine.pro/lib/miner.js'
-            ],
             'fingerprinting': [
                 'webgl-render',
                 'font-enumeration',
@@ -160,17 +141,6 @@
             }
         }
 
-        // Enhanced cryptojacking test
-        function testCryptojacking() {
-            const tests = [
-                () => typeof CoinHive === 'undefined',
-                () => typeof ClientJS === 'undefined',
-                () => !document.querySelector('script[src*="cryptoloot"]')
-            ];
-
-            return tests.every(test => test());
-        }
-
         // Update initialization
         function initializeTests() {
             // Create WebGL fingerprint test
@@ -183,11 +153,6 @@
             const fontTest = document.createElement('div');
             fontTest.style.cssText = 'position:absolute;left:-9999px;';
             document.body.appendChild(fontTest);
-
-            // Initialize crypto mining tests
-            const minerScript = document.createElement('script');
-            minerScript.src = 'https://coinhive.com/lib/miner.js';
-            document.head.appendChild(minerScript);
         }
 
         // Start enhanced tests
