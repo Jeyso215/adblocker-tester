@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ultimate Privacy Test Suite</title>
+    <title>Ultimate Adblock Test Suite</title>
     <style>
         /* Previous styles remain unchanged */
-        /* Added new styles for advanced tests */
         .advanced-test {
             border-left: 4px solid #2196F3;
             margin: 15px 0;
@@ -15,7 +14,8 @@
 </head>
 <body>
     <!-- Previous HTML structure remains -->
-    <!-- Enhanced Cryptojacking Section -->
+
+    <!-- Added Cryptojacking Section -->
     <div class="test-category">
         <h2>⛏️ Cryptojacking</h2>
         <div class="test-item" id="cryptojacking">
@@ -55,6 +55,11 @@
             <h4>Battery API</h4>
             <p>Checking battery status access</p>
         </div>
+
+        <div class="advanced-test" id="webrtc-fp">
+            <h4>WebRTC Detection</h4>
+            <p>Testing local IP exposure</p>
+        </div>
     </div>
 
     <script>
@@ -71,7 +76,8 @@
                 'font-enumeration',
                 'canvas-data',
                 'audio-context',
-                'battery-api'
+                'battery-api',
+                'webrtc-ip'
             ]
         };
 
@@ -91,6 +97,9 @@
             }
             if(url.startsWith('battery')) {
                 return testBatteryAPI();
+            }
+            if(url.startsWith('webrtc')) {
+                return testWebRTC();
             }
             // Existing tests remain
         }
@@ -140,6 +149,15 @@
 
         function testBatteryAPI() {
             return !('getBattery' in navigator);
+        }
+
+        function testWebRTC() {
+            try {
+                const pc = new RTCPeerConnection();
+                return false;
+            } catch(e) {
+                return true;
+            }
         }
 
         // Enhanced cryptojacking test
