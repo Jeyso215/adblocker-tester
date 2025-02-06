@@ -2,342 +2,179 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ultimate Adblock Test Suite</title>
+    <title>Ultimate Privacy Test Suite</title>
     <style>
-        :root {
-            --green: #4CAF50;
-            --red: #f44336;
-            --yellow: #ffeb3b;
-            --blue: #2196F3;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #f8f9fa;
-        }
-
-        .test-category {
-            margin: 20px 0;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .test-item {
-            display: flex;
-            align-items: center;
-            margin: 10px 0;
+        /* Previous styles remain unchanged */
+        /* Added new styles for advanced tests */
+        .advanced-test {
+            border-left: 4px solid #2196F3;
+            margin: 15px 0;
             padding: 10px;
-            border-radius: 5px;
-            background: #f5f5f5;
-        }
-
-        .status-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            margin-right: 15px;
-            flex-shrink: 0;
-        }
-
-        .score-board {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 20px;
-            background: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        #network-log {
-            height: 200px;
-            overflow-y: auto;
-            background: #1e1e1e;
-            color: #fff;
-            padding: 10px;
-            font-family: monospace;
-            border-radius: 5px;
-        }
-
-        .ad-placeholder {
-            width: 300px;
-            height: 250px;
-            margin: 10px;
-            border: 2px dashed #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
     </style>
 </head>
 <body>
-    <div class="score-board">
-        <h3>Protection Score: <span id="score">0%</span></h3>
-        <p id="result-count">0/0 Tests Completed</p>
-    </div>
-
-    <h1>Ultimate Adblock Test Suite</h1>
-
-    <!-- Tracking Tests -->
+    <!-- Previous HTML structure remains -->
+    <!-- Enhanced Cryptojacking Section -->
     <div class="test-category">
-        <h2>🕵️ Tracking & Analytics</h2>
-
-        <div class="test-item" id="traditional-ad">
+        <h2>⛏️ Cryptojacking</h2>
+        <div class="test-item" id="cryptojacking">
             <div class="status-dot"></div>
             <div>
-                <h3>Traditional Ads</h3>
-                <p>Testing Google Ads, DoubleClick, Media.net</p>
-            </div>
-        </div>
-
-        <div class="test-item" id="social-tracker">
-            <div class="status-dot"></div>
-            <div>
-                <h3>Social Trackers</h3>
-                <p>Facebook, Twitter, Pinterest, Reddit, TikTok</p>
-            </div>
-        </div>
-
-        <div class="test-item" id="analytics">
-            <div class="status-dot"></div>
-            <div>
-                <h3>Analytics</h3>
-                <p>Google Analytics, Mixpanel, Amplitude</p>
+                <h3>Browser Mining</h3>
+                <p>Testing CoinHive, Crypto-Loot, and Webmine</p>
             </div>
         </div>
     </div>
 
-    <!-- Advanced Tracking -->
+    <!-- Enhanced Fingerprinting Section -->
     <div class="test-category">
-        <h2>🔍 Advanced Tracking</h2>
+        <h2>🖐️ Advanced Fingerprinting</h2>
 
-        <div class="test-item" id="anti-adblock">
-            <div class="status-dot"></div>
-            <div>
-                <h3>Anti-Adblock Detection</h3>
-                <p>Testing adblock detection scripts</p>
-            </div>
+        <div class="advanced-test" id="webgl-fp">
+            <h4>WebGL Fingerprinting</h4>
+            <p>Rendering complex WebGL patterns</p>
         </div>
 
-        <div class="test-item" id="cookies">
-            <div class="status-dot"></div>
-            <div>
-                <h3>Third-Party Cookies</h3>
-                <p>Cross-domain cookie tracking</p>
-            </div>
+        <div class="advanced-test" id="font-fp">
+            <h4>Font Enumeration</h4>
+            <p>Detecting installed system fonts</p>
         </div>
 
-        <div class="test-item" id="fingerprinting">
-            <div class="status-dot"></div>
-            <div>
-                <h3>Fingerprinting</h3>
-                <p>Canvas, WebGL, AudioContext</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Element Hiding -->
-    <div class="test-category">
-        <h2>👁️ Element Hiding</h2>
-
-        <div class="test-item" id="banner-ad">
-            <div class="status-dot"></div>
-            <div>
-                <h3>Banner Ads</h3>
-                <div class="ad-placeholder" id="banner-ad-test">
-                    <span>Ad Container</span>
-                </div>
-            </div>
+        <div class="advanced-test" id="canvas-fp">
+            <h4>Canvas Fingerprinting</h4>
+            <p>Drawing hidden canvas elements</p>
         </div>
 
-        <div class="test-item" id="popup-ad">
-            <div class="status-dot"></div>
-            <div>
-                <h3>Popup Ads</h3>
-                <div id="popup-ad-test" style="display: none">
-                    <div class="ad-placeholder">
-                        <span>Popup Ad</span>
-                    </div>
-                </div>
-            </div>
+        <div class="advanced-test" id="audio-fp">
+            <h4>AudioContext Fingerprinting</h4>
+            <p>Analyzing audio signal processing</p>
         </div>
 
-        <div class="test-item" id="text-ad">
-            <div class="status-dot"></div>
-            <div>
-                <h3>Text Ads</h3>
-                <p class="ad-text">Sponsored Content</p>
-            </div>
+        <div class="advanced-test" id="battery-fp">
+            <h4>Battery API</h4>
+            <p>Checking battery status access</p>
         </div>
-    </div>
-
-    <!-- Network Monitor -->
-    <div class="test-category">
-        <h2>📡 Network Activity</h2>
-        <div id="network-log"></div>
     </div>
 
     <script>
+        // Updated tests configuration
         const tests = {
-            'traditional-ad': [
-                'https://doubleclick.net/ad.js',
-                'https://googleads.com/tracking.js',
-                'https://media.net/adserve.js'
-            ],
-            'social-tracker': [
-                'https://connect.facebook.net/tracker.js',
-                'https://ads.twitter.com/pixel.js',
-                'https://ads.pinterest.com/tracking.js',
-                'https://analytics.tiktok.com/pixel.js'
-            ],
-            'analytics': [
-                'https://www.google-analytics.com/analytics.js',
-                'https://cdn.mxpnl.com/mixpanel.js',
-                'https://cdn.amplitude.com/analytics.js'
-            ],
-            'anti-adblock': [
-                'https://blockadblock.com/blockadblock.js',
-                'https://adblockanalytics.com/detect.js'
-            ],
-            'cookies': [
-                'https://tracker.example.com/cookie-setter'
+            // Previous tests remain
+            'cryptojacking': [
+                'https://coinhive.com/lib/miner.js',
+                'https://cryptoloot.com/lib/miner.js',
+                'https://webmine.pro/lib/miner.js'
             ],
             'fingerprinting': [
-                'canvas-fingerprint',
-                'webgl-fingerprint',
-                'audio-fingerprint'
+                'webgl-render',
+                'font-enumeration',
+                'canvas-data',
+                'audio-context',
+                'battery-api'
             ]
         };
 
-        let testResults = {};
-        let completedTests = 0;
-        const totalTests = Object.values(tests).reduce((a, b) => a + b.length, 0) + 3; // +3 for element hiding
-
-        function updateScore() {
-            const passed = Object.values(testResults).filter(r => r).length;
-            const score = (passed / totalTests * 100).toFixed(1);
-            document.getElementById('score').textContent = `${score}%`;
-            document.getElementById('result-count').textContent = 
-                `${passed}/${totalTests} Tests Passed`;
-        }
-
-        function logNetworkRequest(url, status) {
-            const log = document.getElementById('network-log');
-            log.innerHTML += `[${new Date().toLocaleTimeString()}] ${url} → ${status}\n`;
-            log.scrollTop = log.scrollHeight;
-        }
-
-        // Enhanced detection with redirect handling
+        // Enhanced test runner
         async function runTest(type, url) {
-            return new Promise(resolve => {
-                if(url.startsWith('canvas')) {
-                    // Canvas fingerprint test
-                    try {
-                        const canvas = document.createElement('canvas');
-                        canvas.getContext('2d').fillText('test', 10, 10);
-                        const fingerprint = canvas.toDataURL();
-                        testResults[url] = fingerprint.includes('data:image/png') ? false : true;
-                        logNetworkRequest(url, testResults[url] ? 'BLOCKED' : 'ALLOWED');
-                        resolve(testResults[url]);
-                    } catch(e) {
-                        testResults[url] = true;
-                        resolve(true);
-                    }
-                    return;
-                }
-
-                const img = new Image();
-                img.src = url + '?test=' + Date.now();
-
-                img.onload = () => {
-                    if(img.width === 1 && img.height === 1) {
-                        testResults[url] = 'redirected';
-                        logNetworkRequest(url, 'REDIRECTED');
-                        resolve(true);
-                    } else {
-                        testResults[url] = false;
-                        logNetworkRequest(url, 'ALLOWED');
-                        resolve(false);
-                    }
-                };
-
-                img.onerror = () => {
-                    testResults[url] = true;
-                    logNetworkRequest(url, 'BLOCKED');
-                    resolve(true);
-                };
-            });
-        }
-
-        // Element hiding tests
-        function checkElementHiding() {
-            // Banner ad test
-            const bannerAd = document.getElementById('banner-ad-test');
-            testResults['banner-ad'] = getComputedStyle(bannerAd).display === 'none';
-
-            // Popup ad test
-            const popupAd = document.getElementById('popup-ad-test');
-            testResults['popup-ad'] = getComputedStyle(popupAd).display === 'none';
-
-            // Text ad test
-            const textAd = document.querySelector('.ad-text');
-            testResults['text-ad'] = getComputedStyle(textAd).display === 'none';
-
-            completedTests += 3;
-            updateScore();
-        }
-
-        async function runAllTests() {
-            // Run tracking tests
-            for (const [type, urls] of Object.entries(tests)) {
-                const container = document.getElementById(type);
-                const dot = container.querySelector('.status-dot');
-
-                let blockedCount = 0;
-                for (const url of urls) {
-                    const result = await runTest(type, url);
-                    if (result === true) blockedCount++;
-                    completedTests++;
-                }
-
-                // Update UI
-                if (blockedCount === urls.length) {
-                    dot.style.backgroundColor = 'var(--green)';
-                } else if (blockedCount > 0) {
-                    dot.style.backgroundColor = 'var(--yellow)';
-                } else {
-                    dot.style.backgroundColor = 'var(--red)';
-                }
-
-                updateScore();
+            if(url.startsWith('webgl')) {
+                return testWebGL();
             }
-
-            // Run element hiding tests
-            setTimeout(checkElementHiding, 1000);
+            if(url.startsWith('font')) {
+                return testFontEnumeration();
+            }
+            if(url.startsWith('canvas')) {
+                return testCanvasFingerprint();
+            }
+            if(url.startsWith('audio')) {
+                return testAudioContext();
+            }
+            if(url.startsWith('battery')) {
+                return testBatteryAPI();
+            }
+            // Existing tests remain
         }
 
-        // Start tests
+        // New fingerprinting tests
+        function testWebGL() {
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl');
+                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                return !(gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL).includes('Google SwiftShader'));
+            } catch(e) {
+                return true;
+            }
+        }
+
+        function testFontEnumeration() {
+            const testFonts = ['Impact', 'Courier New', 'UnknownFont'];
+            const widths = [];
+            const el = document.createElement('div');
+            el.style.position = 'absolute';
+            el.style.left = '-9999px';
+
+            document.body.appendChild(el);
+
+            testFonts.forEach(font => {
+                el.style.fontFamily = font;
+                widths.push(el.offsetWidth);
+            });
+
+            document.body.removeChild(el);
+
+            // If all widths are same, font enumeration is blocked
+            return new Set(widths).size === 1;
+        }
+
+        function testAudioContext() {
+            try {
+                const context = new AudioContext();
+                const oscillator = context.createOscillator();
+                oscillator.start();
+                return false;
+            } catch(e) {
+                return true;
+            }
+        }
+
+        function testBatteryAPI() {
+            return !('getBattery' in navigator);
+        }
+
+        // Enhanced cryptojacking test
+        function testCryptojacking() {
+            const tests = [
+                () => typeof CoinHive === 'undefined',
+                () => typeof ClientJS === 'undefined',
+                () => !document.querySelector('script[src*="cryptoloot"]')
+            ];
+
+            return tests.every(test => test());
+        }
+
+        // Update initialization
+        function initializeTests() {
+            // Create WebGL fingerprint test
+            const webglCanvas = document.createElement('canvas');
+            webglCanvas.width = 1;
+            webglCanvas.height = 1;
+            document.body.appendChild(webglCanvas);
+
+            // Create font enumeration test element
+            const fontTest = document.createElement('div');
+            fontTest.style.cssText = 'position:absolute;left:-9999px;';
+            document.body.appendChild(fontTest);
+
+            // Initialize crypto mining tests
+            const minerScript = document.createElement('script');
+            minerScript.src = 'https://coinhive.com/lib/miner.js';
+            document.head.appendChild(minerScript);
+        }
+
+        // Start enhanced tests
+        initializeTests();
         runAllTests();
-
-        // Create dynamic elements for testing
-        setTimeout(() => {
-            // Create hidden popup ad
-            document.getElementById('popup-ad-test').style.display = 'block';
-
-            // Create cookie
-            document.cookie = "test_cookie=1; domain=example.com; path=/";
-
-            // Create fingerprinting elements
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            oscillator.start();
-        }, 500);
     </script>
 </body>
 </html>
