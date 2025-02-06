@@ -87,7 +87,6 @@
     <!-- Tracking Tests -->
     <div class="test-category">
         <h2>🕵️ Tracking & Analytics</h2>
-
         <div class="test-item" id="traditional-ad">
             <div class="status-dot"></div>
             <div>
@@ -116,7 +115,6 @@
     <!-- Advanced Tracking -->
     <div class="test-category">
         <h2>🔍 Advanced Tracking</h2>
-
         <div class="test-item" id="anti-adblock">
             <div class="status-dot"></div>
             <div>
@@ -141,12 +139,6 @@
             </div>
         </div>
 
-            <div class="advanced-test" id="webrtc-fp">
-            <h4>WebRTC Detection</h4>
-            <p>Testing local IP exposure</p>
-        </div>
-    </div>
-
         <div class="test-item" id="fingerprinting">
             <div class="status-dot"></div>
             <div>
@@ -154,12 +146,19 @@
                 <p>Canvas, WebGL, AudioContext</p>
             </div>
         </div>
+
+        <div class="test-item" id="webrtc-fp">
+            <div class="status-dot"></div>
+            <div>
+                <h3>WebRTC Detection</h3>
+                <p>Testing local IP exposure</p>
+            </div>
+        </div>
     </div>
 
     <!-- Element Hiding -->
     <div class="test-category">
         <h2>👁️ Element Hiding</h2>
-
         <div class="test-item" id="banner-ad">
             <div class="status-dot"></div>
             <div>
@@ -233,29 +232,24 @@
 
         let testResults = {};
         let completedTests = 0;
-        const totalTests = Object.values(tests).reduce((a, b) => a + b.length, 0) + 3; // +3 for element hiding
+        const totalTests = Object.values(tests).reduce((a, b) => a + b.length, 0) + 3;
 
         function updateScore() {
-            const passed = Object.values(testResults).filter(r => r).length;
+            const passed = Object.values(testResults).filter(r => r === true).length;
             const score = (passed / totalTests * 100).toFixed(1);
             document.getElementById('score').textContent = `${score}%`;
             document.getElementById('result-count').textContent = 
                 `${passed}/${totalTests} Tests Passed`;
         }
 
-         if(url.startsWith('battery')) {
-                return testBatteryAPI();
-            }
-            if(url.startsWith('webrtc')) {
-                return testWebRTC();
-            }
-        <h4>Battery API</h4>
+        function testBatteryAPI() {
             return !('getBattery' in navigator);
         }
 
         function testWebRTC() {
             try {
                 const pc = new RTCPeerConnection();
+                pc.close();
                 return false;
             } catch(e) {
                 return true;
@@ -264,22 +258,36 @@
 
         function logNetworkRequest(url, status) {
             const log = document.getElementById('network-log');
-            log.innerHTML += `[${new Date().toLocaleTimeString()}] ${url} → ${status}\n`;
+            log.textContent += `[${new Date().toLocaleTimeString()}] ${url} → ${status}\n`;
             log.scrollTop = log.scrollHeight;
         }
 
-        // Enhanced detection with redirect handling
         async function runTest(type, url) {
             return new Promise(resolve => {
+                if(url === 'battery-api') {
+                    const result = testBatteryAPI();
+                    testResults[url] = result;
+                    logNetworkRequest(url, result ? 'BLOCKED' : 'ALLOWED');
+                    return resolve(result);
+                }
+
+                if(url === 'webrtc-ip') {
+                    const result = testWebRTC();
+                    testResults[url] = result;
+                    logNetworkRequest(url, result ? 'BLOCKED' : 'ALLOWED');
+                    return resolve(result);
+                }
+
                 if(url.startsWith('canvas')) {
-                    // Canvas fingerprint test
                     try {
                         const canvas = document.createElement('canvas');
-                        canvas.getContext('2d').fillText('test', 10, 10);
+                        const ctx = canvas.getContext('2d');
+                        ctx.fillText('test', 10, 10);
                         const fingerprint = canvas.toDataURL();
-                        testResults[url] = fingerprint.includes('data:image/png') ? false : true;
-                        logNetworkRequest(url, testResults[url] ? 'BLOCKED' : 'ALLOWED');
-                        resolve(testResults[url]);
+                        const blocked = !fingerprint.includes('image/png');
+                        testResults[url] = blocked;
+                        logNetworkRequest(url, blocked ? 'BLOCKED' : 'ALLOWED');
+                        resolve(blocked);
                     } catch(e) {
                         testResults[url] = true;
                         resolve(true);
@@ -291,15 +299,10 @@
                 img.src = url + '?test=' + Date.now();
 
                 img.onload = () => {
-                    if(img.width === 1 && img.height === 1) {
-                        testResults[url] = 'redirected';
-                        logNetworkRequest(url, 'REDIRECTED');
-                        resolve(true);
-                    } else {
-                        testResults[url] = false;
-                        logNetworkRequest(url, 'ALLOWED');
-                        resolve(false);
-                    }
+                    const blocked = img.width === 1 && img.height === 1;
+                    testResults[url] = blocked;
+                    logNetworkRequest(url, blocked ? 'REDIRECTED' : 'ALLOWED');
+                    resolve(blocked);
                 };
 
                 img.onerror = () => {
@@ -310,69 +313,57 @@
             });
         }
 
-        // Element hiding tests
         function checkElementHiding() {
-            // Banner ad test
             const bannerAd = document.getElementById('banner-ad-test');
-            testResults['banner-ad'] = getComputedStyle(bannerAd).display === 'none';
+            testResults['banner-ad'] = bannerAd.offsetParent === null;
 
-            // Popup ad test
             const popupAd = document.getElementById('popup-ad-test');
-            testResults['popup-ad'] = getComputedStyle(popupAd).display === 'none';
+            testResults['popup-ad'] = popupAd.offsetParent === null;
 
-            // Text ad test
             const textAd = document.querySelector('.ad-text');
-            testResults['text-ad'] = getComputedStyle(textAd).display === 'none';
+            testResults['text-ad'] = textAd.offsetParent === null;
 
             completedTests += 3;
             updateScore();
         }
 
         async function runAllTests() {
-            // Run tracking tests
             for (const [type, urls] of Object.entries(tests)) {
                 const container = document.getElementById(type);
                 const dot = container.querySelector('.status-dot');
-
                 let blockedCount = 0;
+
                 for (const url of urls) {
                     const result = await runTest(type, url);
-                    if (result === true) blockedCount++;
+                    if (result) blockedCount++;
                     completedTests++;
                 }
 
-                // Update UI
-                if (blockedCount === urls.length) {
-                    dot.style.backgroundColor = 'var(--green)';
-                } else if (blockedCount > 0) {
-                    dot.style.backgroundColor = 'var(--yellow)';
-                } else {
-                    dot.style.backgroundColor = 'var(--red)';
-                }
-
+                dot.style.backgroundColor = blockedCount === urls.length ? 'var(--green)' :
+                    blockedCount > 0 ? 'var(--yellow)' : 'var(--red)';
                 updateScore();
             }
 
-            // Run element hiding tests
             setTimeout(checkElementHiding, 1000);
         }
 
-        // Start tests
-        runAllTests();
+        // Start tests after initial render
+        window.addEventListener('DOMContentLoaded', () => {
+            runAllTests();
 
-        // Create dynamic elements for testing
-        setTimeout(() => {
-            // Create hidden popup ad
-            document.getElementById('popup-ad-test').style.display = 'block';
-
-            // Create cookie
-            document.cookie = "test_cookie=1; domain=example.com; path=/";
-
-            // Create fingerprinting elements
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            oscillator.start();
-        }, 500);
+            setTimeout(() => {
+                document.getElementById('popup-ad-test').style.display = 'block';
+                try {
+                    document.cookie = "test_cookie=1; domain=example.com; path=/";
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    oscillator.start();
+                    setTimeout(() => oscillator.stop(), 100);
+                } catch(e) {
+                    console.log('Audio context blocked:', e);
+                }
+            }, 500);
+        });
     </script>
 </body>
 </html>
